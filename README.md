@@ -22,3 +22,6 @@ and finally run the ansible.
 ```bash
 root@ansible:~/ansible-rotate-password# ansible-playbook main.yaml -i inventory.ini
 ```
+
+## Note
+you can add `no_log: true` in each task if you want hide the password showing in terminal when you running the ansible
