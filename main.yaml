@@ -1,0 +1,20 @@
+---
+- hosts: all
+  gather_facts: no
+  become: True
+  tasks:
+    - include_vars: vars/{{ inventory_hostname }}/user_list.yaml
+    - debug: msg={{ item.username }}
+      with_items: "{{ user_list }}"
+
+    - name: "Check if user exists"
+      register: user_exists
+      raw: getent passwd {{ item.username }}
+      ignore_errors: true
+      with_items: "{{ user_list }}"
+
+    - name: "Change users password"
+      user:
+          name: "{{ item.username }}"
+          password: "{{ item.password | password_hash('sha512') }}"
+      with_items: "{{ user_list }}"
